@@ -142,3 +142,28 @@
       - Allows for one broker to be taken down for maintenance.
       - Allows for another broker to be taken down unexpectedly.
     - As long as the number of partitions remain coinstant for a topic the same key will always go to the same partition.
+
+- STARTING KAFKA:
+  - Windows download and setup:
+    1. Download and install Java SE Development Kit 8.
+    2. Download the Kafka binaries.
+    3. Within a command prompt:
+    ```javascript
+      C:\Kafka\bin>cd windows
+      C:\Kafka\bin\windows>kafka-topics.bat
+    ```
+    4. Add 'C:\Kafka\bin\windows' to Environment Variables PATH.
+    5. Create some subfolders:
+    - C:\Kafka\data\kafka
+    - C:\Kafka\data\zookeeper
+    6. Edit configuration:
+    - config\zookeeper.properties
+    7. Run zookeeper
+    ```javascript
+      C:\>zookeeper-server-start.bat C:\Kafka\config\zookeeper.properties
+    ```
+    8. Edit properties:
+    - config\server.properties
+    ```javascript
+      C:\>kafka-server-start.bat C:\Kafka\config\server.properties
+    ```
