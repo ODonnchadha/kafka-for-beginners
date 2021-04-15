@@ -144,6 +144,7 @@
     - As long as the number of partitions remain coinstant for a topic the same key will always go to the same partition.
 
 - STARTING KAFKA:
+
   - Windows download and setup:
     1. Download and install Java SE Development Kit 8.
     2. Download the Kafka binaries.
@@ -167,3 +168,63 @@
     ```javascript
       C:\>kafka-server-start.bat C:\Kafka\config\server.properties
     ```
+
+- COMMAND LINE INTERFACE (CLI:)
+- You cannot create a topic with a replication factor greater than the number of brokers.
+
+  ```javascript
+    C:\Kafka\bin\windows>kafka-topics --zookeeper 127.0.0.1:2181 --topic first_topic --create --partitions 3 --replication-factor 1
+    C:\Kafka\bin\windows>kafka-topics --zookeeper 127.0.0.1:2181 --list
+    C:\Kafka\bin\windows>kafka-topics --zookeeper 127.0.0.1:2181 --topic first_topic --describe
+  ```
+
+  - NOTE: Windows users. Do not delete topics.
+
+  ```javascript
+    C:\Kafka\bin\windows>kafka-console-producer --broker-list 127.0.0.1:9092 --topic first_topic
+    C:\Kafka\bin\windows>kafka-console-producer --broker-list 127.0.0.1:9092 --topic first_topic --producer-property acks=all
+  ```
+
+  - What happens if we send to a topic that does not exist? Warning on the first send. Not the second.
+  - "New" topic was created midstream.
+
+  - This will only read the "new" messages.
+
+  ```javascript
+    C:\Kafka\bin\windows>kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic
+  ```
+
+  - To read all:
+
+  ```javascript
+    C:\Kafka\bin\windows>kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic
+    C:\Kafka\bin\windows>kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic --from-beginning
+  ```
+
+  - Part of the same consumer group? Because they share the same group id, they are split between consumers. e.g.: 3 partitions and 3 consumers.
+
+  ```javascript
+    C:\Kafka\bin\windows>kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic --group my-first-application
+    C:\Kafka\bin\windows>kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic --group my-first-application
+    C:\Kafka\bin\windows>kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic --group my-second-application --from-beginning
+  ```
+
+- When a group is specified, the offsets are committed. The --from-beginning option will not be taken into account after the second 'run.'
+
+- NOTE: A random console consumer is gererated for you if you do not specify a group.
+
+  ```javascript
+    C:\Kafka\bin\windows>kafka-consumer-groups --bootstrap-server localhost:9092 --list
+  ```
+
+  - Watch as CURRENT-OFFSET and LOG_END-OFFSET per each console-consumer creates a LAG if catching-up is needed.
+
+  - Reseting offsets? Replaying data: For a defined consumer group. With several options.
+
+  ```javascript
+    C:\Kafka\bin\windows>kafka-consumer-groups --bootstrap-server localhost:9092 --topic first_topic --group my-first-application --reset-offsets --shift-by 2 --execute
+    C:\Kafka\bin\windows>kafka-consumer-groups --bootstrap-server localhost:9092 --topic first_topic --group my-first-application --reset-offsets --to-earliest --execute
+  ```
+
+  - Describe will give you PARTITION and NEW-OFFSET
+  - And there is a UI. Recommended: www.kafkatool.com
