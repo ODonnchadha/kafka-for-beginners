@@ -228,3 +228,7 @@
 
   - Describe will give you PARTITION and NEW-OFFSET
   - And there is a UI. Recommended: www.kafkatool.com
+
+- JAVA PROGRAMMING 101
+  - Obtain the necessary packages: https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients
+  - Use the Karka documentation: https://kafka.apache.org/documentation/
